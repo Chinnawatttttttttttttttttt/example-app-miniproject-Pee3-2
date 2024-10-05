@@ -1,0 +1,86 @@
+.classification-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.label {
+    flex-grow: 1;
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+.progress {
+    width: 50%;
+    background-color: #eee;
+    border-radius: 8px;
+    overflow: hidden; /* Ensures the progress bar respects border radius */
+    margin-left: 5px; /* ลดระยะห่างระหว่างข้อความและหลอดความคืบหน้า */
+}
+
+
+.progress-bar {
+    width: 0%;
+    height: 20px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 20px; /* Vertically center text */
+    color: white;
+    border-radius: 8px; /* Optional: if you want rounded corners */
+}
+#webcam-container {
+    display: flex;
+    justify-content: center; /* จัดกลางแนวนอน */
+ /* จัดกลางแนวตั้ง หากมีความสูงเพียงพอ */
+    height: 70vh; /* หรือความสูงที่เหมาะสมตามความต้องการ */
+}
+
+/* หรือถ้า #webcam-container ไม่ได้เป็น flex container แต่เป็น child ของ container อื่น */
+.container { /* สมมติว่าเป็น container ภายนอกของ #webcam-container */
+    display: flex;
+    justify-content: center;
+
+    height: 70vh; /* หรือความสูงที่เหมาะสมตามความต้องการ */
+}
+.btn-check-save {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition-duration: 0.4s;
+}
+
+.btn-check-save:hover {
+    background-color: #45a049;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.btn-success:hover {
+    background-color: #218838; /* สีเข้มขึ้นเล็กน้อย */
+    border-color: #1e7e34; /* ขอบสีเข้มขึ้น */
+    transform: scale(1.05); /* ขยายขนาดเล็กน้อย */
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.alert {
+    animation: fadeIn 1s;
+}
+.form-control:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border-color: #66afe9;
+}
