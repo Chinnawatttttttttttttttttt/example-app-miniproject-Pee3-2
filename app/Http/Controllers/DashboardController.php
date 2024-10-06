@@ -9,7 +9,7 @@ use App\Models\product;
 
 class DashboardController extends Controller
 {
-    
+
 
 
 
