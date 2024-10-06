@@ -1,17 +1,3 @@
-<!--
-=========================================================
-* Paper Dashboard 2 - v2.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/paper-dashboard-2
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,7 +49,7 @@ Coded by www.creative-tim.com
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('report') }}">
+                        <a href="{{ route('sales.summary') }}">
                             <i class="fas fa-chart-bar"></i>
                             <p>สรุปการขาย</p>
                         </a>
@@ -143,8 +129,8 @@ Coded by www.creative-tim.com
                 </script>
             </div>
 
-                <div class="container mt-6" style="max-width: none;">
-                    <div class="card" style="width: 1600px;">
+                <div class="container mt-6">
+                    <div class="card">
                         <div class="card-header">
                             <h5>รายการสินค้า</h5>
                         </div>

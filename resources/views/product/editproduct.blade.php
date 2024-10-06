@@ -40,7 +40,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('report') }}">
+                        <a href="{{ route('sales.summary') }}">
                             <i class="fas fa-chart-bar"></i>
                             <p>สรุปการขาย</p>
                         </a>

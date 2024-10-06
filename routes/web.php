@@ -50,16 +50,6 @@ Route::controller(DashboardController::class)->group(function(){
 
 });
 
-Route::controller(ReportController::class)->group(function(){
-
-    Route::get('report','ShowReportAndTotal')->name('report.all')->middleware('CheckLogin');
-
-    Route::get('reporte','ShowReportAndTotale')->name('report.all')->middleware('CheckLogin');
-
-    Route::get('/download-pdf','downloadPDF')->name('pdf.download');
-
-});
-
 Route::controller(AuthController::class)->group(function(){
 
     Route::get('login','login')->name('login')->middleware('NowLogin');
@@ -71,14 +61,15 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/register-user','registerUser')->name('register.user');
 });
 
-Route::middleware(['IsAdmin'])->group(function () {
+Route::middleware(['IsAdmin','CheckLogin'])->group(function () {
 
     Route::get('add-product', [ProductController::class, 'AddProduct']);
     Route::get('all-product', [ProductController::class, 'ShowProduct']);
     Route::get('edit-product/{id}', [ProductController::class, 'EditProduct']);
-    Route::get('report', [ReportController::class, 'ShowReportAndTotal']);
     Route::get('home', [DashboardController::class, 'ShowProduct']);
     Route::get('report-product', [ReportController::class, 'Report_Product'])->name('report.product');
+    Route::get('report-sales', [ReportController::class, 'Report_Sales'])->name('report.sales');
+    Route::get('sales-summary',[ReportController::class,'ShowSales_Summary'])->name('sales.summary');
 
 });
 

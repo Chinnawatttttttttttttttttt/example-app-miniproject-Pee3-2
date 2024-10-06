@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Report</title>
+    <title>Sales Report</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -42,24 +42,36 @@
             border-radius: 5px;
             font-size: 16px;
         }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #95a5a6;
+        }
     </style>
 </head>
-<body>
+<body class="container">
     <div class="report-header">
-        <h1>{{ $title }}</h1>
+        <h1>รายงานยอดขาย</h1>
         <p>Date: {{ $date }}</p>
     </div>
+
     <div class="report-section">
-        <h2>Total Sales</h2>
-        <p>{{ $totalSales }}</p>
+        <h2>ยอดขายรวม</h2>
+        <p>{{ number_format($totalSales, 2) }} บาท</p>
     </div>
+
     <div class="report-section">
-        <h2>Counts by Product</h2>
+        <h2>จำนวนที่ขายได้ตามสินค้า</h2>
         <ul>
-            @foreach ($counts as $name => $quantity)
-                <li>{{ $name }}: {{ $quantity }}</li>
+            @foreach ($counts as $item)
+                <li>{{ $item->name }} : {{ $item->total_quantity }} ชิ้น</li>
             @endforeach
         </ul>
+    </div>
+
+    <div class="footer">
+        <p>รายงานนี้ถูกสร้างขึ้นในระบบเมื่อวันที่ {{ $date }}</p>
     </div>
 </body>
 </html>
