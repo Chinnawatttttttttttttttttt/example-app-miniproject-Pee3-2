@@ -62,12 +62,13 @@ Route::controller(ReportController::class)->group(function(){
 
 Route::controller(AuthController::class)->group(function(){
 
-    Route::get('login','login')->middleware('NowLogin');
+    Route::get('login','login')->name('login')->middleware('NowLogin');
     Route::post('/login-user','loginUser')->name('login.user');
 
     Route::get('logout','logout')->middleware('CheckLogin');
 
-    Route::get('/add-user','AddUser');
+    Route::get('register','register')->name('register')->middleware('NowLogin');
+    Route::post('/register-user','registerUser')->name('register.user');
 });
 
 Route::middleware(['IsAdmin'])->group(function () {
