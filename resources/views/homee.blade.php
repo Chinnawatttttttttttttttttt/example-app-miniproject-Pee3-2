@@ -241,6 +241,7 @@
                                 id: product.id,
                                 name: product.name,
                                 quantity: quantity,
+                                price: product.price,
                                 total: product.price * quantity,
                             });
                         }
@@ -280,7 +281,7 @@
 
                                         items.forEach(item => {
                                             const listItem = document.createElement('li');
-                                            listItem.innerText = `${item.name} (จำนวน: ${item.quantity} ราคา: ${item.price} บาท) ราคารวม: ${item.total} บาท`;
+                                            listItem.innerText = `${item.name} (จำนวน: ${item.quantity} ราคาต่อหน่วย: ${item.price} บาท) ราคารวม: ${item.total} บาท`;
                                             receiptItemsList.appendChild(listItem);
                                         });
 
