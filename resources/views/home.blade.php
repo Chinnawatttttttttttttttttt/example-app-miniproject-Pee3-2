@@ -103,29 +103,15 @@ Coded by www.creative-tim.com
                                     <div class="row">
                                         <div class="col-5 col-md-4">
                                             <div class="icon-big text-center icon-warning">
-                                                <i class="fas fa-ice-cream icon-ice-cream"></i>
-                                                <script>
-                                                    document.addEventListener('DOMContentLoaded', function() {
-                                                        const colors = [
-                                                            '#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6', '#e67e22', '#1abc9c', '#34495e',
-                                                            '#95a5a6', '#d35400', '#c0392b', '#8e44ad', '#16a085', '#27ae60', '#2980b9', '#2c3e50',
-                                                            '#f39c12', '#7f8c8d'
-                                                        ];
-                                                        const icons = document.querySelectorAll('.icon-ice-cream');
-                                                        icons.forEach((icon, index) => {
-                                                            icon.style.color = colors[index % colors.length];
-                                                        });
-                                                    });
-                                                </script>
-
+                                                <!-- แสดงรูปสินค้าจากฐานข้อมูล -->
+                                                <img src="{{ url('/' . $item->image) }}" alt="{{ $item->name }}"
+                                                     class="img-fluid" style="max-width: 100px; max-height: 100px;">
                                             </div>
                                         </div>
                                         <div class="col-7 col-md-8">
                                             <div class="numbers">
-                                                <h7 class="card-title" style="margin:0;">รส: {{ $item->name }}
-                                                </h7>
-                                                <p class="card-text" style="font-size:20px;">ราคา: {{ $item->price }}
-                                                </p>
+                                                <h7 class="card-title" style="margin:0;">รส: {{ $item->name }}</h7>
+                                                <p class="card-text" style="font-size:20px;">ราคา: {{ $item->price }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -133,30 +119,29 @@ Coded by www.creative-tim.com
                                 <div class="card-footer">
                                     <hr>
                                     <div class="quantity-controls">
-                                        <button class="decrease-quantity"
-                                            onclick="changeQuantity('{{ $item->id }}', -1)">-</button>
+                                        <button class="decrease-quantity" onclick="changeQuantity('{{ $item->id }}', -1)">-</button>
                                         <span id="quantity-{{ $item->id }}">0</span>
-                                        <button class="increase-quantity"
-                                            onclick="changeQuantity('{{ $item->id }}', 1)">+</button>
-                                        <script>
-                                            function changeQuantity(productId, change) {
-                                                // Find the quantity span
-                                                const quantitySpan = document.getElementById(`quantity-${productId}`);
-                                                // Parse current quantity, increment/decrement, and update
-                                                let quantity = parseInt(quantitySpan.innerText);
-                                                quantity += change;
-                                                // Prevent negative values
-                                                quantity = quantity < 0 ? 0 : quantity;
-                                                // Update the display
-                                                quantitySpan.innerText = quantity;
-                                            }
-                                        </script>
+                                        <button class="increase-quantity" onclick="changeQuantity('{{ $item->id }}', 1)">+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
+                <script>
+                    function changeQuantity(productId, change) {
+                        // Find the quantity span
+                        const quantitySpan = document.getElementById(`quantity-${productId}`);
+                        // Parse current quantity, increment/decrement, and update
+                        let quantity = parseInt(quantitySpan.innerText);
+                        quantity += change;
+                        // Prevent negative values
+                        quantity = quantity < 0 ? 0 : quantity;
+                        // Update the display
+                        quantitySpan.innerText = quantity;
+                    }
+                </script>
+            </div>
 
                 <div class="container mt-6" style="max-width: none;">
                     <div class="card" style="width: 1600px;">

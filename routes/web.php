@@ -78,6 +78,7 @@ Route::middleware(['IsAdmin'])->group(function () {
     Route::get('edit-product/{id}', [ProductController::class, 'EditProduct']);
     Route::get('report', [ReportController::class, 'ShowReportAndTotal']);
     Route::get('home', [DashboardController::class, 'ShowProduct']);
+    Route::get('report-product', [ReportController::class, 'Report_Product'])->name('report.product');
 
 });
 
