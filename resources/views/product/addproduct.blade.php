@@ -43,7 +43,7 @@ Coded by www.creative-tim.com
         <div class="sidebar" data-color="white" data-active-color="danger">
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li >
+                    <li>
                         <a href="{{ url('home') }}">
                             <i class="fas fa-home"></i>
                             <p>หน้าหลัก</p>
@@ -55,7 +55,7 @@ Coded by www.creative-tim.com
                             <p>สินค้า</p>
                         </a>
                     </li>
-                    <li >
+                    <li>
                         <a href="{{ url('report') }}">
                             <i class="fas fa-chart-bar"></i>
                             <p>สรุปการขาย</p>
@@ -80,7 +80,8 @@ Coded by www.creative-tim.com
                         @endphp
                         <li class="nav-item d-flex align-items-center">
                             <span style="margin-right: 10px;">{{ $user->username }}</span>
-                            <a class="nav-link btn btn-danger btn-sm" href="{{ url('logout') }}" style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">Logout</a>
+                            <a class="nav-link btn btn-danger btn-sm" href="{{ url('logout') }}"
+                                style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">Logout</a>
                         </li>
                     @endif
 
@@ -90,8 +91,10 @@ Coded by www.creative-tim.com
             <div class="content">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="border-radius: 20px; border-color: #007bff; border-width: 2px;">
-                            <div class="card-header" style="background-color: #007bff; color: white; border-top-left-radius: 18px; border-top-right-radius: 18px;">
+                        <div class="card shadow-lg p-3 mb-5 bg-white rounded"
+                            style="border-radius: 20px; border-color: #007bff; border-width: 2px;">
+                            <div class="card-header"
+                                style="background-color: #007bff; color: white; border-top-left-radius: 18px; border-top-right-radius: 18px;">
                                 <h4 class="card-title" style="color: white;">เพิ่มสินค้า</h4>
                             </div>
                             <div class="card-body" style="background-color: #f8f9fa;">
@@ -105,18 +108,106 @@ Coded by www.creative-tim.com
                                         });
                                     </script>
                                 @endif
-                                <form action="{{ route('store.product') }}" enctype="multipart/form-data" method="POST" class="p-3">
+                                <form action="{{ route('store.product') }}" enctype="multipart/form-data" method="POST"
+                                    class="p-3">
                                     @csrf
                                     <div class="form-group mb-3">
                                         <label for="name">ชื่อสินค้า</label>
-                                        <input type="text" name="name" class="form-control" placeholder="ชื่อสินค้า">
-                                        <span class="text-danger">@error('name'){{ $message }}@enderror</span>
+                                        <input type="text" name="name" class="form-control"
+                                            placeholder="ชื่อสินค้า" required>
+                                        <span class="text-danger">
+                                            @error('name')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
                                     </div>
+
                                     <div class="form-group mb-3">
                                         <label for="price">ราคา</label>
-                                        <input type="int" name="price" class="form-control" placeholder="ราคา">
-                                        <span class="text-danger">@error('price'){{ $message }}@enderror</span>
+                                        <input type="number" name="price" class="form-control" placeholder="ราคา"
+                                            min="0" step="0.01" required>
+                                        <span class="text-danger">
+                                            @error('price')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
                                     </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="image">รูปสินค้า</label>
+                                        <div class="custom-file">
+                                            <input type="file" name="image" class="custom-file-input"
+                                                id="imageInput" accept="image/*" onchange="loadImage(event)">
+                                            <label class="custom-file-label" for="imageInput"
+                                                id="fileNameLabel">เลือกไฟล์รูปภาพ</label>
+                                            <span class="text-danger">
+                                                @error('image')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
+                                        </div>
+
+                                        <!-- แสดงตัวอย่างรูปภาพ -->
+                                        <div class="mt-3">
+                                            <img id="imagePreview" src="#" alt="Preview รูปภาพ"
+                                                style="display: none; width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Custom CSS -->
+                                    <style>
+                                        .custom-file-input {
+                                            visibility: hidden;
+                                            position: absolute;
+                                        }
+
+                                        .custom-file-label {
+                                            padding: 10px;
+                                            background-color: #6c757d;
+                                            color: white;
+                                            border-radius: 25px;
+                                            cursor: pointer;
+                                            text-align: center;
+                                            transition: background-color 0.3s ease;
+                                        }
+
+                                        .custom-file-label:hover {
+                                            background-color: #5a6268;
+                                        }
+
+                                        #imagePreview {
+                                            border: 2px solid #ddd;
+                                            padding: 5px;
+                                            border-radius: 10px;
+                                            margin-top: 15px;
+                                        }
+                                    </style>
+
+                                    <!-- JavaScript สำหรับแสดงชื่อไฟล์และตัวอย่างรูป -->
+                                    <script>
+                                        function loadImage(event) {
+                                            var imagePreview = document.getElementById('imagePreview');
+                                            var fileNameLabel = document.getElementById('fileNameLabel');
+                                            var file = event.target.files[0];
+
+                                            // แสดงชื่อไฟล์ใน label
+                                            fileNameLabel.textContent = file.name;
+
+                                            // แสดงตัวอย่างรูปภาพ
+                                            if (file) {
+                                                var reader = new FileReader();
+                                                reader.onload = function(e) {
+                                                    imagePreview.src = e.target.result;
+                                                    imagePreview.style.display = 'block';
+                                                }
+                                                reader.readAsDataURL(file);
+                                            } else {
+                                                imagePreview.style.display = 'none';
+                                            }
+                                        }
+                                    </script>
+
+
                                     <button type="submit" class="btn btn-primary">บันทึก</button>
                                 </form>
                             </div>
