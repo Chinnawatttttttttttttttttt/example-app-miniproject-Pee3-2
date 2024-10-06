@@ -1,17 +1,3 @@
-<!--
-    =========================================================
-    * Paper Dashboard 2 - v2.0.1
-    =========================================================
-
-    * Product Page: https://www.creative-tim.com/product/paper-dashboard-2
-    * Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-    Coded by www.creative-tim.com
-
-     =========================================================
-
-    * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-    -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +10,7 @@
     <title> Home </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
-    <!--     Fonts and icons     -->
+    <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -39,6 +25,45 @@
     <link href="../assets/demo/demo.css" rel="stylesheet" />
     <link href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* เพิ่มสไตล์สำหรับปุ่มลอย */
+        #floatingCartButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        /* เมื่อ hover ให้เปลี่ยนสี */
+        #floatingCartButton:hover {
+            background-color: #e53935;
+        }
+
+        /* ข้อความสั่งซื้อสินค้า */
+        #floatingCartButtonText {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            background-color: #f44336;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            z-index: 999;
+        }
+    </style>
 </head>
 
 <body class="">
@@ -62,7 +87,6 @@
                 <div class="container-fluid">
                     <div class="navbar-wrapper">
                         <div class="navbar-toggle">
-
                         </div>
                         <a class="navbar-brand" href="javascript:;">หน้าหลัก</a>
                     </div>
@@ -108,9 +132,6 @@
                                                     <button class="increase-quantity"
                                                         onclick="changeQuantity('{{ $item->id }}', 1)">+</button>
                                                 </div>
-                                                <button onclick="addToCart('{{ $item->id }}', '{{ $item->name }}')">
-                                                    <i class="fas fa-shopping-cart"></i>
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -120,175 +141,46 @@
                     @endforeach
                 </div>
             </div>
-            <button id="showCartButton" onclick="toggleCartItems()">แสดงสินค้าที่เพิ่มลงในตะกร้า</button>
-            <!-- Cart items modal or section -->
-            <div id="cartItemsModal" style="display: none; padding: 10px; border: 1px solid #ccc;">
-                <h3>สินค้าที่อยู่ในตะกร้า</h3>
-                <ul id="cartItemsList"></ul>
-                <button id="submitDataButton">ยืนยันการสั่งซื้อ</button>
+
+            <!-- Floating Cart Button -->
+            <div id="floatingCartButton" data-bs-toggle="modal" data-bs-target="#cartModal">
+                <i class="fas fa-shopping-cart"></i>
             </div>
-            <script>
-                const cart = {};
-            
-                function toggleCartItems() {
-                    const cartItemsModal = document.getElementById("cartItemsModal");
-                    const cartItemsList = document.getElementById("cartItemsList");
-                    const showCartButton = document.getElementById("showCartButton");
-            
-                    if (cartItemsModal.style.display === 'none') {
-                        // Clear previous items
-                        cartItemsList.innerHTML = '';
-            
-                        // Check if there are items in the cart
-                        if (Object.keys(cart).length === 0) {
-                            cartItemsList.innerText = 'ยังไม่มีสินค้าที่เพิ่มลงในตะกร้า'; // Message when cart is empty
-                        } else {
-                            // Loop through each item in the cart
-                            for (const productId in cart) {
-                                const product = @json($products).find(item => item.id == productId); // Find the product by ID
-            
-                                // Only display items with quantity greater than 0
-                                if (product && cart[productId] > 0) {
-                                    const listItem = document.createElement('li');
-                                    // Display product name and quantity
-                                    listItem.innerText = `ชื่อสินค้า: ${product.name}, จำนวน: ${cart[productId]}`;
-            
-                                    // Create a remove button
-                                    const removeButton = document.createElement('button');
-                                    removeButton.innerText = 'ลบ';
-                                    removeButton.onclick = () => removeFromCart(productId);
-                                    listItem.appendChild(removeButton);
-            
-                                    cartItemsList.appendChild(listItem);
-                                }
-                            }
-                        }
-                        cartItemsModal.style.display = 'block';
-                        showCartButton.innerText = 'ซ่อนสินค้าที่เพิ่มลงในตะกร้า';
-                    } else {
-                        // If modal is visible, hide the cart items
-                        cartItemsModal.style.display = 'none';
-                        showCartButton.innerText = 'แสดงสินค้าที่เพิ่มลงในตะกร้า';
-                    }
-                }
-            
-                function changeQuantity(productId, change) {
-                    const quantitySpan = document.getElementById(`quantity-${productId}`);
-                    let quantity = parseInt(quantitySpan.innerText);
-                    quantity += change;
-            
-                    // Ensure quantity does not go below zero
-                    if (quantity < 0) {
-                        quantity = 0;
-                    }
-            
-                    // Update the displayed quantity
-                    quantitySpan.innerText = quantity;
-            
-                    // Update the cart if quantity is zero
-                    if (quantity === 0) {
-                        delete cart[productId]; // Remove product from cart
-                    } else {
-                        cart[productId] = quantity; // Update quantity in cart
-                    }
-                }
-            
-                function addToCart(productId, name) {
-                    const quantitySpan = document.getElementById(`quantity-${productId}`);
-                    const quantity = parseInt(quantitySpan.innerText);
-            
-                    // Only add to the cart if quantity is greater than 0
-                    if (quantity > 0) {
-                        cart[productId] = quantity; // Set quantity directly in cart
-                        alert(`เพิ่ม ${name} จำนวน ${quantity} ไปยังตะกร้า!`);
-            
-                        // Hide the cart items modal after adding items to the cart
-                        const cartItemsModal = document.getElementById("cartItemsModal");
-                        cartItemsModal.style.display = 'none';
-                        document.getElementById("showCartButton").innerText = 'แสดงสินค้าที่เพิ่มลงในตะกร้า';
-                    } else {
-                        // Show alert if quantity is 0
-                        alert("กรุณาเพิ่มจำนวนสินค้าก่อนเพิ่มลงตะกร้า!");
-                    }
-            
-                    // Update the button text based on cart content
-                    updateCartButton();
-                }
-            
-                function showCartItems() {
-                    const cartItemsList = document.getElementById("cartItemsList");
-                    cartItemsList.innerHTML = ''; // Clear previous items
-            
-                    // Check if there are items in the cart
-                    if (Object.keys(cart).length === 0) {
-                        cartItemsList.innerText = 'ยังไม่มีสินค้าที่เพิ่มลงในตะกร้า'; // Message when cart is empty
-                    } else {
-                        // Loop through each item in the cart
-                        for (const productId in cart) {
-                            const product = @json($products).find(item => item.id == productId); // Find the product by ID
-            
-                            // Only display items with quantity greater than 0
-                            if (product && cart[productId] > 0) {
-                                const listItem = document.createElement('li');
-                                // Display product name and quantity
-                                listItem.innerText = `ชื่อสินค้า: ${product.name}, จำนวน: ${cart[productId]}`;
-            
-                                // Create a remove button
-                                const removeButton = document.createElement('button');
-                                removeButton.innerText = 'ลบ';
-                                removeButton.onclick = () => removeFromCart(productId);
-                                listItem.appendChild(removeButton);
-            
-                                cartItemsList.appendChild(listItem);
-                            }
-                        }
-                    }
-            
-                    // Show the modal
-                    document.getElementById("cartItemsModal").style.display = 'block';
-                }
-            
-                function removeFromCart(productId) {
-                    // Remove the product from the cart
-                    delete cart[productId];
-            
-                    // Update the cart display
-                    showCartItems();
-                    
-                    // Update the button text based on cart content
-                    updateCartButton();
-                }
-            
-                function updateCartButton() {
-                    const showCartButton = document.getElementById("showCartButton");
-                    // Show the button regardless of cart state
-                    showCartButton.style.display = 'block';
-                    if (Object.keys(cart).length === 0) {
-                        showCartButton.innerText = 'เพิ่มสินค้าลงในตะกร้า'; // Text when cart is empty
-                    } else {
-                        showCartButton.innerText = 'แสดงสินค้าที่เพิ่มลงในตะกร้า'; // Text when there are items
-                    }
-                }
-            </script>
-            
-            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <!-- Button for confirming purchase -->
-            <!-- Bootstrap Modal for Receipt -->
-            <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel"
-                aria-hidden="true">
+            <div id="floatingCartButtonText">สั่งซื้อสินค้า</div>
+
+            <!-- Cart Items Modal -->
+            <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cartModalLabel">สินค้าที่อยู่ในตะกร้า</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul id="cartItemsList"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="submitDataButton" class="btn btn-primary">ยืนยันการสั่งซื้อ</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Receipt Modal -->
+            <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="receiptModalLabel">ใบเสร็จ</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p>วัน: <span id="receiptDate"></span></p>
                             <p>ชื่อผู้สั่ง: <span id="customerName"></span></p>
                             <h3>รายการสินค้า:</h3>
                             <ul id="receiptItemsList"></ul>
-                            <p>รวมทั้งหมด: <span id="overallTotalReceipt"></span> บาท</p>
+                            <p>รวมทั้งหมด: <span id="overallTotalReceipt"></span></p>
                             <canvas id="receiptCanvas" style="display: none;"></canvas>
                         </div>
                         <div class="modal-footer">
@@ -300,17 +192,50 @@
             </div>
 
             <script>
+                const cart = {};
+
+                function changeQuantity(productId, change) {
+                    const quantitySpan = document.getElementById(`quantity-${productId}`);
+                    let quantity = parseInt(quantitySpan.innerText);
+                    quantity += change;
+
+                    if (quantity < 0) quantity = 0;
+                    quantitySpan.innerText = quantity;
+
+                    if (quantity === 0) delete cart[productId];
+                    else cart[productId] = quantity;
+                }
+
+                // ฟังก์ชันสำหรับแสดงสินค้าที่อยู่ในตะกร้า
+                document.getElementById('cartModal').addEventListener('show.bs.modal', function () {
+                    const cartItemsList = document.getElementById('cartItemsList');
+                    cartItemsList.innerHTML = ''; // ล้างรายการก่อนแสดงใหม่
+
+                    if (Object.keys(cart).length === 0) {
+                        cartItemsList.innerHTML = '<li>ไม่มีสินค้าที่อยู่ในตะกร้า</li>';
+                    } else {
+                        for (const productId in cart) {
+                            const product = @json($products).find(item => item.id == productId);
+                            if (product && cart[productId] > 0) {
+                                const listItem = document.createElement('li');
+                                listItem.innerHTML = `${product.name} - จำนวน: ${cart[productId]} - ราคา: ${product.price * cart[productId]} บาท`;
+                                cartItemsList.appendChild(listItem);
+                            }
+                        }
+                    }
+                });
+
                 document.getElementById('submitDataButton').addEventListener('click', function(e) {
                     e.preventDefault();
-            
+
                     // Fetch the cart items from the displayed data
                     const data = @json($products); // Laravel blade syntax for passing PHP data to JavaScript
                     let items = [];
-            
+
                     data.forEach(product => {
                         const quantityElement = document.getElementById(`quantity-${product.id}`);
                         let quantity = quantityElement ? parseInt(quantityElement.innerText, 10) : 0;
-            
+
                         if (quantity > 0) {
                             items.push({
                                 id: product.id,
@@ -320,14 +245,14 @@
                             });
                         }
                     });
-            
+
                     let overallTotal = items.reduce((acc, item) => acc + item.total, 0);
-            
+
                     let formData = {
                         items: items,
                         overallTotal: overallTotal,
                     };
-            
+
                     // Send form data via AJAX to the server
                     fetch('/submit-data', {
                             method: 'POST',
@@ -339,74 +264,82 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            // Show success alert
-                            Swal.fire({
-                                title: 'ซื้อสินค้าเรียบร้อย!',
-                                icon: 'success',
-                                confirmButtonText: 'ตกลง'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Populate receipt details
-                                    document.getElementById("receiptDate").innerText = new Date().toLocaleDateString();
-                                    document.getElementById("customerName").innerText = 'ชื่อผู้ใช้'; // Replace with actual user name if available
-                                    const receiptItemsList = document.getElementById("receiptItemsList");
-                                    receiptItemsList.innerHTML = ''; // Clear previous items
-            
-                                    items.forEach(item => {
-                                        const listItem = document.createElement('li');
-                                        listItem.innerText = `${item.name} (จำนวน: ${item.quantity}, ราคา: ${item.price} บาท) ราคารวม: ${item.total} บาท`;
-                                        receiptItemsList.appendChild(listItem);
-                                    });
-            
-                                    document.getElementById("overallTotalReceipt").innerText = overallTotal + ' บาท';
-            
-                                    // Show the modal
-                                    const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
-                                    receiptModal.show();
-                                    
-                                    // Wait for the modal to be fully shown before downloading
-                                    document.getElementById('downloadReceiptButton').onclick = function() {
-                                        // Ensure the modal is fully visible
-                                        setTimeout(() => {
-                                            html2canvas(document.getElementById('receiptModal'))
-                                                .then(canvas => {
+                            if (data.success) {
+                                // Show success alert
+                                Swal.fire({
+                                    title: 'ซื้อสินค้าเรียบร้อย!',
+                                    icon: 'success',
+                                    confirmButtonText: 'ตกลง'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Populate receipt details
+                                        document.getElementById("receiptDate").innerText = new Date().toLocaleDateString();
+                                        document.getElementById("customerName").innerText = 'ชื่อผู้ใช้'; // Replace with actual user name if available
+                                        const receiptItemsList = document.getElementById("receiptItemsList");
+                                        receiptItemsList.innerHTML = ''; // Clear previous items
+
+                                        items.forEach(item => {
+                                            const listItem = document.createElement('li');
+                                            listItem.innerText = `${item.name} (จำนวน: ${item.quantity} ราคา: ${item.price} บาท) ราคารวม: ${item.total} บาท`;
+                                            receiptItemsList.appendChild(listItem);
+                                        });
+
+                                        document.getElementById("overallTotalReceipt").innerText = overallTotal + ' บาท';
+
+                                        // Show the modal
+                                        const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+                                        receiptModal.show();
+
+                                        // Wait for the modal to be fully shown before downloading
+                                        document.getElementById('downloadReceiptButton').onclick = function () {
+                                            // รอให้ Modal แสดงผลอย่างสมบูรณ์
+                                            setTimeout(() => {
+                                                const receiptModalContent = document.querySelector('#receiptModal .modal-content'); // จับภาพเฉพาะเนื้อหาใน Modal
+
+                                                html2canvas(receiptModalContent).then(canvas => {
                                                     const link = document.createElement('a');
-                                                    link.download = 'ใบเสร็จ.png';
-                                                    link.href = canvas.toDataURL('image/png');
-                                                    link.click();
+                                                    link.download = 'ใบเสร็จ.png';  // ชื่อไฟล์ใบเสร็จ
+                                                    link.href = canvas.toDataURL('image/png');  // แปลงเป็นภาพ PNG
+                                                    link.click();  // ดาวน์โหลดรูปภาพ
+                                                }).catch(error => {
+                                                    console.error('Error capturing receipt:', error);
+                                                    Swal.fire({
+                                                        title: 'เกิดข้อผิดพลาด!',
+                                                        text: 'ไม่สามารถจับภาพใบเสร็จได้',
+                                                        icon: 'error',
+                                                        confirmButtonText: 'ตกลง'
+                                                    });
                                                 });
-                                        }, 500); // Delay to ensure the modal is rendered
-                                    };
-                                }
-                            });
+                                            }, 1000);  // รอเวลา 1 วินาทีเพื่อให้มั่นใจว่า Modal แสดงผลครบถ้วน
+                                        };
+
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'เกิดข้อผิดพลาด!',
+                                    text: data.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'ตกลง'
+                                });
+                            }
                         })
                         .catch((error) => {
                             console.error('Error:', error);
+                            Swal.fire({
+                                title: 'เกิดข้อผิดพลาด!',
+                                text: 'ไม่สามารถบันทึกการสั่งซื้อได้',
+                                icon: 'error',
+                                confirmButtonText: 'ตกลง'
+                            });
                         });
                 });
-            
-                // Refresh the page when the modal is closed
-                document.getElementById('receiptModal').addEventListener('hidden.bs.modal', function() {
-                    location.reload();
-                });
+
             </script>
+
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.0.0-alpha.12/html2canvas.min.js"></script>
-            
-            <!--   Core JS Files   --
-
-            <script src="../assets/js/core/jquery.min.js"></script>
-            <script src="../assets/js/core/popper.min.js"></script>
-            <script src="../assets/js/core/bootstrap.min.js"></script>
-            <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-
-
-            <script src="../assets/js/plugins/chartjs.min.js"></script>
-            <!--  Notifications Plugin    -->
-            <script src="../assets/js/plugins/bootstrap-notify.js"></script>
-            <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-            <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project' -->
-            <script src="../assets/demo/demo.js"></script>
 
 </body>
 
