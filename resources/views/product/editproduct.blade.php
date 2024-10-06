@@ -132,7 +132,7 @@
                                             <p>รูปภาพปัจจุบัน:</p>
                                             @if ($product->image)
                                                 <img src="{{ url('/' . $product->image) }}" alt="รูปสินค้า"
-                                                    style="width: 30%; height: 30%; object-fit: cover;">
+                                                    style="width: 200px; height: 200px; object-fit: cover;">
                                             @else
                                                 <p>ไม่มีรูปภาพ</p>
                                             @endif
@@ -141,7 +141,7 @@
                                         <!-- แสดงตัวอย่างรูปภาพใหม่ -->
                                         <div class="mt-3">
                                             <img id="imagePreview" src="#" alt="Preview รูปภาพใหม่"
-                                                style="display: none; width: 30%; height: 30%; object-fit: cover; border-radius: 10px;">
+                                                style="display: none; width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
                                         </div>
                                     </div>
 

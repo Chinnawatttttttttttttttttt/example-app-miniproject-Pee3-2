@@ -61,4 +61,10 @@ class ReportController extends Controller
 
         return $pdf->download('report.pdf');
     }
+
+    public function Report_Product()
+    {
+        $products = product::all();
+        return view('pdf.report_product', compact('products'));
+    }
 }

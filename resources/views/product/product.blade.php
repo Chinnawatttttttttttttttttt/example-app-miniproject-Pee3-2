@@ -35,6 +35,8 @@
     <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project' -->
     <link href="../assets/demo/demo.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
 </head>
 
 <body class="">
@@ -90,15 +92,19 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title"> สินค้า</h4>
+                                <h4 class="card-title"> รายการสินค้า</h4>
                                 <a class="btn btn-success" href="/add-product">เพิ่มสินค้า</a>
+                                <button class="btn btn-primary" id="generate-pdf">
+                                    <i class="fas fa-print"></i>
+                                </button>
 
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead class=" text-primary">
-                                            <th>Id</th>
+                                            <th>ID</th>
+                                            <th>Image</th>
                                             <th>Name</th>
                                             <th>Price</th>
                                             <th>Edit</th>
@@ -108,6 +114,7 @@
                                             @foreach ($products as $product)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
+                                                    <td><img src="{{ $product->image }}" width="50px"></td>
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->price }}</td>
                                                     <td><a href="/edit-product/{{ $product->id }}"
@@ -148,8 +155,73 @@
     <!--  Notifications Plugin    -->
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+    <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
     <script src="../assets/demo/demo.js"></script>
+
+    <script>
+        document.getElementById('generate-pdf').addEventListener('click', function() {
+            // Fetch the content from the report.product route
+            fetch("{{ route('report.product') }}")
+                .then(response => response.text()) // Fetch HTML as text
+                .then(data => {
+                    // Convert the fetched HTML into a DOM object
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, 'text/html');
+                    const element = doc.querySelector('.container'); // Get the content (change .container to .content if needed)
+
+                    // Add CSS to set the font back to the template's original font
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        * {
+                            font-family: 'Open Sans', Arial, sans-serif !important;
+                            color: black !important;
+                            background-color: white !important;
+                        }
+
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        table, th, td {
+                            border: 1px solid black;
+                        }
+                        th, td {
+                            padding: 5px;
+                            text-align: center;
+                        }
+                        img {
+                            max-width: 100px;
+                            height: auto;
+                        }
+                        /* ปรับความกว้างของคอลัมน์ ID และ Image */
+                        th.id-column, td.id-column {
+                            width: 5%;
+                        }
+                        th.image-column, td.image-column {
+                            width: 10%;
+                        }
+                    `;
+                    element.appendChild(style);
+
+                    // Configure options for generating the PDF
+                    var opt = {
+                        margin: 0.5,
+                        filename: 'Product_Report.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                    };
+
+                    // Generate the PDF and open it in a new window
+                    html2pdf().set(opt).from(element).output('blob').then(function(pdfBlob) {
+                        var pdfUrl = URL.createObjectURL(pdfBlob);
+                        var pdfWindow = window.open();
+                        pdfWindow.location.href = pdfUrl;
+                    });
+                })
+                .catch(error => console.error('Error fetching report data:', error));
+        });
+    </script>
 </body>
 
 </html>

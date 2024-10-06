@@ -18,7 +18,7 @@
 </head>
 
 <body class="">
-    <div class="wrapper ">
+    <div class="wrapper">
         <div class="main-panel" style="width: 100%;">
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
@@ -34,7 +34,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Login</h4>
+                                <h4 class="card-title text-center">Login</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('login.user') }}" method="POST">
