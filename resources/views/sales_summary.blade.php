@@ -33,8 +33,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-
-
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/css/ai-2.css') }}">
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -44,6 +42,8 @@
     <link href="../assets/demo/demo.css" rel="stylesheet" />
     <link href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
 </head>
 
 <body class="">
@@ -64,7 +64,7 @@
                         </a>
                     </li>
                     <li class="active ">
-                        <a href="{{ url('report') }}">
+                        <a href="{{ route('sales.summary') }}">
                             <i class="fas fa-chart-bar"></i>
                             <p>สรุปการขาย</p>
                         </a>
@@ -131,7 +131,7 @@
                         </div>
                     @endforeach
                 </div>
-                <a href="{{ route('pdf.download') }}" class="btn-primary">Download PDF</a>
+                <button id="showSalesReportButton" class="btn btn-primary">Show Sales Report</button>
                 <div class="col-lg-12">
                     <div class="card card-stats">
                         <div class="card-body"
@@ -211,6 +211,119 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById('showSalesReportButton').addEventListener('click', function() {
+                // Fetch content from the report.sales route
+                fetch("{{ route('report.sales') }}")
+                    .then(response => response.text()) // Get HTML as text
+                    .then(data => {
+                        // สร้าง DOM จาก HTML ที่ดึงมา
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(data, 'text/html');
+                        const element = doc.querySelector('.container'); // ตรวจสอบว่ามีเนื้อหาที่ต้องการอยู่ใน container
+
+                        // กำหนด CSS เพิ่มเติมถ้าจำเป็น
+                        const style = document.createElement('style');
+                        style.innerHTML = `
+                            * {
+                                font-family: 'Open Sans', Arial, sans-serif !important;
+                                color: black !important;
+                                background-color: white !important;
+                            }
+                            body {
+                                font-family: 'Arial', sans-serif;
+                                margin: 40px;
+                                color: #333;
+                                background-color: #f4f7fa;
+                            }
+
+                            .report-header {
+                                text-align: center;
+                                margin-bottom: 40px;
+                            }
+
+                            .report-header h1 {
+                                color: #2c3e50;
+                                font-size: 28px;
+                                margin: 0;
+                                padding-bottom: 10px;
+                                border-bottom: 3px solid #2980b9;
+                                display: inline-block;
+                            }
+
+                            .report-header p {
+                                margin: 5px 0;
+                                font-size: 16px;
+                                color: #7f8c8d;
+                            }
+
+                            .report-section {
+                                background-color: white;
+                                padding: 20px;
+                                border-radius: 8px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                margin-bottom: 30px;
+                            }
+
+                            .report-section h2 {
+                                color: #2980b9;
+                                font-size: 20px;
+                                border-bottom: 2px solid #ecf0f1;
+                                padding-bottom: 10px;
+                                margin-bottom: 20px;
+                            }
+
+                            .report-section p {
+                                font-size: 18px;
+                                margin: 0;
+                                color: #2c3e50;
+                            }
+
+                            ul {
+                                list-style-type: none;
+                                padding: 0;
+                                margin: 0;
+                            }
+
+                            li {
+                                background-color: #ecf0f1;
+                                margin: 5px 0;
+                                padding: 15px;
+                                border: 1px solid #bdc3c7;
+                                border-radius: 5px;
+                                font-size: 18px;
+                                color: #2c3e50;
+                            }
+
+                            .footer {
+                                text-align: center;
+                                margin-top: 30px;
+                                font-size: 14px;
+                                color: #95a5a6;
+                            }
+                        `;
+                        element.appendChild(style); // ใส่ style เพิ่มเติม
+
+                        // ตั้งค่า options สำหรับการสร้าง PDF
+                        var opt = {
+                            margin: 0.5,
+                            filename: 'Sales_Report.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        };
+
+                        // สร้าง PDF และเปิดในหน้าต่างใหม่
+                        html2pdf().set(opt).from(element).output('blob').then(function(pdfBlob) {
+                            var pdfUrl = URL.createObjectURL(pdfBlob);
+                            var pdfWindow = window.open();
+                            pdfWindow.location.href = pdfUrl; // แสดง PDF ในหน้าต่างใหม่
+                        });
+                    })
+                    .catch(error => console.error('Error fetching report data:', error));
+            });
+        </script>
 
         <!--   Core JS Files   --
 
