@@ -48,10 +48,10 @@
 
                                     @csrf
                                     <div class="form-group">
-                                        <label for="username">Username</label>
-                                        <input type="text" class="form-control" name="username">
+                                        <label for="username">Username or Email</label>
+                                        <input type="text" class="form-control" name="username" id="username">
                                         <span class="text-danger">
-                                            @error('username')
+                                            @error('username'||'email')
                                                 {{ $message }}
                                             @enderror
                                         </span>
@@ -64,6 +64,7 @@
                                                 {{ $message }}
                                             @enderror
                                     </div>
+                                    <p>don't have an account? <a href="{{ route('register') }}">Register</a></p>
                                     <button type="submit" class="btn btn-primary btn-block">Login</button>
                                 </form>
                             </div>

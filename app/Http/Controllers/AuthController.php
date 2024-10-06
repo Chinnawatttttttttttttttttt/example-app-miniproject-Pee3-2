@@ -22,14 +22,15 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('username','=', $request->username)->first();
+        $loginType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        $user = User::where($loginType, '=', $request->username)->first();
 
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
                 $request->session()->put('loginUser', $user->id);
 
-                // ตรวจสอบว่า username เป็น 'admin'
-                if ($user->username === 'admin') {
+                if ($user->username === 'admin' || $user->email === 'admin@gmail.com') {
                     return redirect('home');
                 } else {
                     return redirect('homee');
@@ -42,16 +43,32 @@ class AuthController extends Controller
         }
     }
 
-    public function AddUser(Request $request)
+    public function register()
     {
-
-        $user = new User;
-        $user->username = 'admin';
-        $user->password = 'admin';
-        $user->save();
-
-        return back()->with('success', 'User added successfully.');
+        return view('Auth.register');
     }
+
+    public function registerUser(Request $request)
+    {
+        $request->validate([
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        if ($user) {
+            return redirect('login')->with('success', 'ลงทะเบียนเรียบร้อย');
+        } else {
+            return back()->with('fail', 'ลงทะเบียนไม่สําเร็จ');
+        }
+    }
+
 
     public function getUserAccount(Request $request)
     {
