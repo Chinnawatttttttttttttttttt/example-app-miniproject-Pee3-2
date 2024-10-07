@@ -50,25 +50,29 @@ class AuthController extends Controller
 
     public function registerUser(Request $request)
     {
+        // Validate input fields, including address
         $request->validate([
             'username' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
+            'address' => 'required', // Add address validation
         ]);
-
+    
+        // Create new user with the provided data
         $user = User::create([
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'address' => $request->address, // Save address to the database
         ]);
-
+    
+        // Check if user creation was successful
         if ($user) {
             return redirect('login')->with('success', 'ลงทะเบียนเรียบร้อย');
         } else {
             return back()->with('fail', 'ลงทะเบียนไม่สําเร็จ');
         }
     }
-
 
     public function getUserAccount(Request $request)
     {

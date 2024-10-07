@@ -277,6 +277,7 @@
                                 <hr>
                                 <p><strong>วันที่:</strong> <span id="receiptDate"></span></p>
                                 <p><strong>ชื่อลูกค้า:</strong> <span id="customerName"></span></p>
+                                <p><strong>ที่อยู่:</strong> <span id="customerAddress"></span></p>
                                 <hr>
                                 <h5>รายการสินค้า</h5>
                                 <ul id="receiptItemsList" class="list-group"></ul>
@@ -425,10 +426,10 @@
                                         modalInstance.hide();
 
                                         // Populate receipt details
-                                        document.getElementById("receiptDate").innerText = new Date()
-                                            .toLocaleDateString();
-                                        document.getElementById("customerName").innerText =
-                                            @json($user->username);
+                                        document.getElementById("receiptDate").innerText = new Date().toLocaleDateString();
+                                        document.getElementById("customerName").innerText =@json($user->username);
+                                        document.getElementById("customerAddress").innerText = @json($user->address); // Add this line for address
+
                                         const receiptItemsList = document.getElementById("receiptItemsList");
                                         receiptItemsList.innerHTML = ''; // Clear previous items
 
@@ -439,12 +440,10 @@
                                             receiptItemsList.appendChild(listItem);
                                         });
 
-                                        document.getElementById("overallTotalReceipt").innerText =
-                                            overallTotal + ' บาท';
+                                        document.getElementById("overallTotalReceipt").innerText = overallTotal + ' บาท';
 
                                         // Show the receipt modal
-                                        const receiptModal = new bootstrap.Modal(document.getElementById(
-                                            'receiptModal'));
+                                        const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
                                         receiptModal.show();
                                     }
                                 });
