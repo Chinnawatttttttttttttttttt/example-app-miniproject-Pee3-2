@@ -49,6 +49,15 @@
                                     @enderror
                                 </span>
                             </div>
+                            <div class="form-group">
+                                <label for="address">ที่อยู่</label>
+                                <input type="text" class="form-control" name="address" required>
+                                <span class="text-danger">
+                                    @error('address')
+                                        {{ $message }}
+                                    @enderror
+                                </span>
+                            </div>
                             <button type="submit" class="btn btn-primary btn-block">ลงทะเบียน</button>
                             <a href="{{ route('login') }}" class="btn btn-secondary btn-block">กลับไปยังหน้าเข้าสู่ระบบ</a>
                         </form>
