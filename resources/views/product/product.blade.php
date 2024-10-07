@@ -1,17 +1,3 @@
-<!--
-    =========================================================
-    * Paper Dashboard 2 - v2.0.1
-    =========================================================
-
-    * Product Page: https://www.creative-tim.com/product/paper-dashboard-2
-    * Copyright 2020 Creative Tim (https://www.creative-tim.com)
-
-    Coded by www.creative-tim.com
-
-     =========================================================
-
-    * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-    -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +7,7 @@
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Product
+        จัดการสินค้า
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
@@ -44,16 +30,10 @@
         <div class="sidebar" data-color="white" data-active-color="danger">
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li>
-                        <a href="{{ url('home') }}">
-                            <i class="fas fa-home"></i>
-                            <p>หน้าหลัก</p>
-                        </a>
-                    </li>
                     <li class="active ">
                         <a href="{{ url('all-product') }}">
-                            <i class="fas fa-ice-cream"></i>
-                            <p>สินค้า</p>
+                            <i class="fas fa-box"></i>
+                            <p>จัดการสินค้า</p>
                         </a>
                     </li>
                     <li>
@@ -80,7 +60,7 @@
                         @endphp
                         <li class="nav-item d-flex align-items-center">
                             <span style="margin-right: 10px;">{{ $user->username }}</span>
-                            <a class="nav-link btn btn-danger btn-sm" href="{{ url('logout') }}" style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">Logout</a>
+                            <a class="nav-link btn btn-danger btn-sm" href="{{ url('logout') }}" style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">ออกจากระบบ</a>
                         </li>
                     @endif
 
@@ -102,15 +82,15 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table">
-                                        <thead class=" text-primary">
-                                            <th>ID</th>
-                                            <th>Image</th>
-                                            <th>Name</th>
-                                            <th>Price</th>
-                                            <th>Edit</th>
-                                            <th>Delete</th>
+                                        <thead class="text-primary text-center">
+                                            <th>ลำดับ</th>
+                                            <th>รูปสินค้า</th>
+                                            <th>ชื่อสินค้า</th>
+                                            <th>ราคา</th>
+                                            <th>แก้ไขสินค้า</th>
+                                            <th>ลบสินค้า</th>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="text-center">
                                             @foreach ($products as $product)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
@@ -118,7 +98,7 @@
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->price }}</td>
                                                     <td><a href="/edit-product/{{ $product->id }}"
-                                                            class="btn btn-warning">Edit</a></td>
+                                                            class="btn btn-warning">แก้ไข</a></td>
                                                     <td>
                                                         <form action="{{ route('store.delete', $product->id) }}"
                                                             method="POST">
@@ -127,7 +107,7 @@
                                                             <button type="submit"
                                                                 class="btn btn-xs btn-danger btn-flat show_confirm"
                                                                 data-toggle="tooltip" title="Delete">
-                                                                Delete
+                                                                ลบสินค้า
                                                             </button>
                                                         </form>
                                                     </td>

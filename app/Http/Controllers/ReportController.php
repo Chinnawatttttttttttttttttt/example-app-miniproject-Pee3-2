@@ -15,13 +15,14 @@ class ReportController extends Controller
 {
     public function ShowSales_Summary()
     {
+        $products = product::all();
         $counts = Count::all()->groupBy('name')->map(function ($group) {
             return $group->sum('quantity');
         });
 
         $totalSales = Order::all()->sum('total');
 
-        return view('sales_summary', compact('counts', 'totalSales'));
+        return view('sales_summary', compact('counts', 'totalSales', 'products'));
     }
 
     public function ShowReportAndTotale()

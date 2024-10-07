@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Login</title>
+    <title>เข้าสู่ระบบ</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
         name='viewport' />
     <!-- Fonts and icons -->
@@ -34,7 +34,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title text-center">Login</h4>
+                                <h4 class="card-title text-center">เข้าสู่ระบบ</h4>
                             </div>
                             <div class="card-body">
                                 <form action="{{ route('login.user') }}" method="POST">
@@ -45,10 +45,9 @@
                                         <div class="alert alert-danger">{{ Session::get('fail') }}</div>
                                     @endif
 
-
                                     @csrf
                                     <div class="form-group">
-                                        <label for="username">Username or Email</label>
+                                        <label for="username">ชื่อผู้ใช้หรืออีเมล</label>
                                         <input type="text" class="form-control" name="username" id="username">
                                         <span class="text-danger">
                                             @error('username'||'email')
@@ -57,15 +56,16 @@
                                         </span>
                                     </div>
                                     <div class="form-group">
-                                        <label for="password">Password</label>
+                                        <label for="password">รหัสผ่าน</label>
                                         <input type="password" class="form-control" name="password">
                                         <span class="text-danger">
                                             @error('password')
                                                 {{ $message }}
                                             @enderror
+                                        </span>
                                     </div>
-                                    <p>don't have an account? <a href="{{ route('register') }}">Register</a></p>
-                                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                    <p>ยังไม่มีบัญชีใช่หรือไม่? <a href="{{ route('register') }}">ลงทะเบียน</a></p>
+                                    <button type="submit" class="btn btn-primary btn-block">เข้าสู่ระบบ</button>
                                 </form>
                             </div>
                         </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sales Report</title>
+    <title>รายงานการขาย</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
