@@ -271,7 +271,7 @@
                                     if (result.isConfirmed) {
                                         // Populate receipt details
                                         document.getElementById("receiptDate").innerText = new Date().toLocaleDateString();
-                                        document.getElementById("customerName").innerText = 'ชื่อผู้ใช้'; // Replace with actual user name if available
+                                        document.getElementById("customerName").innerText = @json($user->username);
                                         const receiptItemsList = document.getElementById("receiptItemsList");
                                         receiptItemsList.innerHTML = ''; // Clear previous items
 
