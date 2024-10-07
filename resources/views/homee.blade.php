@@ -103,36 +103,31 @@
 
                 </div>
             </nav>
-
             <!-- End Navbar -->
+
+            <!-- Cart Product -->
             <div class="content">
                 <div class="row">
                     @foreach ($products as $item)
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-5 col-md-4">
-                                            <div class="icon-big text-center icon-warning">
-                                                <!-- Display product image from the database with fixed size -->
-                                                <img src="{{ url('/' . $item->image) }}" alt="{{ $item->name }}"
-                                                    class="img-fluid fixed-img"
-                                                    style="max-width: 100px; height: 100px; object-fit: cover;">
-                                            </div>
-                                        </div>
-                                        <div class="col-7 col-md-8">
-                                            <div class="numbers">
-                                                <h7 class="card-title" style="margin:0;">{{ $item->name }}</h7>
-                                                <p class="card-text" style="font-size:20px; font-weight: bold;">ราคา:
-                                                    {{ $item->price }}</p>
-                                                <div class="quantity-controls">
-                                                    <button class="decrease-quantity"
-                                                        onclick="changeQuantity('{{ $item->id }}', -1)">-</button>
-                                                    <span id="quantity-{{ $item->id }}">0</span>
-                                                    <button class="increase-quantity"
-                                                        onclick="changeQuantity('{{ $item->id }}', 1)">+</button>
-                                                </div>
-                                            </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <div class="text-center">
+                                        <!-- Display product image with centered layout and a clean border -->
+                                        <img src="{{ url('/' . $item->image) }}" alt="{{ $item->name }}"
+                                             class="img-fluid rounded mx-auto d-block"
+                                             style="max-width: 120px; height: 120px; object-fit: cover; border: 1px solid #ddd; padding: 5px;">
+                                    </div>
+                                    <div class="mt-3">
+                                        <h6 class="card-title text-center font-weight-bold" style="font-size: 1rem;">{{ $item->name }}</h6>
+                                        <p class="text-center text-muted" style="font-size: 18px;">ราคา: ฿{{ number_format($item->price, 2) }}</p>
+                                        <div class="d-flex justify-content-center align-items-center mt-2">
+                                            <!-- Quantity controls with a more modern look -->
+                                            <button class="btn btn-outline-secondary btn-sm px-3 decrease-quantity"
+                                                    onclick="changeQuantity('{{ $item->id }}', -1)">-</button>
+                                            <span id="quantity-{{ $item->id }}" class="mx-3" style="font-size: 18px;">0</span>
+                                            <button class="btn btn-outline-secondary btn-sm px-3 increase-quantity"
+                                                    onclick="changeQuantity('{{ $item->id }}', 1)">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -141,6 +136,7 @@
                     @endforeach
                 </div>
             </div>
+            <!-- END Cart Product -->
 
             <!-- Floating Cart Button -->
             <div id="floatingCartButton" data-bs-toggle="modal" data-bs-target="#cartModal">
