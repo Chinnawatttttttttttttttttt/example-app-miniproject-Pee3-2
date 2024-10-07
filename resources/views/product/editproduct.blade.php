@@ -28,15 +28,9 @@
             <div class="sidebar-wrapper">
                 <ul class="nav">
                     <li>
-                        <a href="{{ url('home') }}">
-                            <i class="fas fa-home"></i>
-                            <p>หน้าหลัก</p>
-                        </a>
-                    </li>
-                    <li>
                         <a href="{{ url('all-product') }}">
-                            <i class="fas fa-ice-cream"></i>
-                            <p>สินค้า</p>
+                            <i class="fas fa-box"></i>
+                            <p>จัดการสินค้า</p>
                         </a>
                     </li>
                     <li>
@@ -62,7 +56,7 @@
                         <li class="nav-item d-flex align-items-center">
                             <span style="margin-right: 10px;">{{ $user->username }}</span>
                             <a class="nav-link btn btn-danger btn-sm" href="{{ url('logout') }}"
-                                style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">Logout</a>
+                                style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">ออกจากระบบ</a>
                         </li>
                     @endif
                 </div>

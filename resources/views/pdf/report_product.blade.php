@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Report</title>
+    <title>รายงานสินค้า</title>
 </head>
 <body class="container">
-    <h2>Product Report</h2>
+    <h2>รางานสินค้า</h2>
     <table>
         <thead>
             <tr>
-                <th class="id-column">ID</th>
-                <th class="image-column">Image</th>
-                <th>Name</th>
-                <th>Price</th>
+                <th class="id-column">ลำดับ</th>
+                <th class="image-column">รูปสินค้า</th>
+                <th>ชื่อสินค้า</th>
+                <th>ราคา</th>
             </tr>
         </thead>
         <tbody>

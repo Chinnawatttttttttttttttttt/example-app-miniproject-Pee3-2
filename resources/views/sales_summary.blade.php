@@ -51,16 +51,10 @@
         <div class="sidebar" data-color="white" data-active-color="danger">
             <div class="sidebar-wrapper">
                 <ul class="nav">
-                    <li >
-                        <a href="{{ url('home') }}">
-                            <i class="fas fa-home"></i>
-                            <p>หน้าหลัก</p>
-                        </a>
-                    </li>
                     <li>
                         <a href="{{ url('all-product') }}">
-                            <i class="fas fa-ice-cream"></i>
-                            <p>สินค้า</p>
+                            <i class="fas fa-box"></i>
+                            <p>จัดการสินค้า</p>
                         </a>
                     </li>
                     <li class="active ">
@@ -88,7 +82,8 @@
                         @endphp
                         <li class="nav-item d-flex align-items-center">
                             <span style="margin-right: 10px;">{{ $user->username }}</span>
-                            <a class="nav-link btn btn-danger btn-sm" href="{{ url('logout') }}" style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">Logout</a>
+                            <a class="nav-link btn btn-danger btn-sm" href="{{ url('logout') }}"
+                                style="color: white; padding: 5px 10px; font-size: 14px; border-radius: 15px;">ออกจากระบบ</a>
                         </li>
                     @endif
 
@@ -97,33 +92,29 @@
             <!-- End Navbar -->
             <div class="content">
                 <div class="row">
-                    @foreach ($counts as $name => $quantity)
+                    @foreach ($products as $product)
                         <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-body">
+                            <div class="card card-stats"
+                                style="border: 1px solid #ddd; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                                <div class="card-body" style="padding: 20px;">
                                     <div class="row">
-                                        <div class="col-5 col-md-4">
-                                            <div class="icon-big text-center icon-warning">
-                                                <i class="fas fa-ice-cream icon-ice-cream"></i>
-                                            </div>
-                                            <script>
-                                                document.addEventListener('DOMContentLoaded', function() {
-                                                    const colors = [
-                                                        '#e74c3c','#3498db','#2ecc71','#f1c40f','#9b59b6','#e67e22','#1abc9c','#34495e','#95a5a6','#d35400','#c0392b','#8e44ad','#16a085','#27ae60','#2980b9','#2c3e50','#f39c12','#7f8c8d'
-                                                    ];
-                                                    const icons = document.querySelectorAll('.icon-ice-cream');
-                                                    icons.forEach((icon, index) => {
-                                                        icon.style.color = colors[index % colors.length];
-                                                    });
-                                                });
-                                            </script>
+                                        <div class="col-5 col-md-4 text-center">
+                                            <img src="{{ url('/' . $product->image) }}" alt="{{ $product->name }}"
+                                                class="img-fluid rounded"
+                                                style="max-width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
                                         </div>
-                                        <div class="col-7 col-md-8">
-                                            <div class="numbers">
-                                                <h7 class="card-title" style="margin:0;">รส: {{ $name }}</h7>
-                                                <p class="card-text" style="font-size:20px;">จำนวนที่ขายได้:
-                                                    {{ $quantity }}</p>
-                                            </div>
+                                        <div class="col-7 col-md-8 d-flex flex-column justify-content-center">
+                                            <h5 class="card-title" style="font-weight: bold; color: #333;">
+                                                {{ $product->name }}</h5>
+                                            <p class="card-text" style="font-size: 18px; color: #888;">
+                                                ขายได้:
+                                                <strong>{{ ($counts[$product->name] ?? 0) }}</strong> ชิ้น
+                                            </p>
+                                            <p class="card-text" style="font-size: 18px; color: #888;">
+                                                รายได้:
+                                                <strong>{{ number_format(($counts[$product->name] ?? 0) * $product->price) }}</strong>
+                                                บาท
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -131,101 +122,104 @@
                         </div>
                     @endforeach
                 </div>
-                <button id="showSalesReportButton" class="btn btn-primary">Show Sales Report</button>
-                <div class="col-lg-12">
-                    <div class="card card-stats">
-                        <div class="card-body"
-                            style="display: flex; align-items: center; justify-content: center; height: 120px;">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="numbers text-center">
-                                        <p class="card-text" style="font-size:24px;">รวมยอดขายทั้งหมด:
-                                            {{ $totalSales }}</p>
-                                    </div>
+            </div>
+
+            <button id="showSalesReportButton" class="btn btn-primary">แสดงรายงานการขาย</button>
+            <div class="col-lg-12">
+                <div class="card card-stats">
+                    <div class="card-body"
+                        style="display: flex; align-items: center; justify-content: center; height: 120px;">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="numbers text-center">
+                                    <p class="card-text" style="font-size:24px;">รวมยอดขายทั้งหมด:
+                                        {{ number_format($totalSales) }} บาท</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="container mt-6" style="max-width: none;">
-                    <div class="card" style="width: 1560px;">
-                        <div class="card-header">
-                            <h5>กราฟแสดงการขาย</h5>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="countsChart"></canvas>
-                        </div>
+            <div class="container mt-6" style="max-width: none;">
+                <div class="card" style="width: 1560px;">
+                    <div class="card-header">
+                        <h5>กราฟแสดงการขาย</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="countsChart"></canvas>
+                    </div>
 
-                        <script>
-                            // Prepare the data
-                            var countsData = @json($counts);
+                    <script>
+                        // Prepare the data
+                        var countsData = @json($counts);
 
-                            // Extracting names and quantities
-                            var names = Object.keys(countsData);
-                            var quantities = Object.values(countsData);
+                        // Extracting names and quantities
+                        var names = Object.keys(countsData);
+                        var quantities = Object.values(countsData);
 
-                            // Define colors for the chart
-                            var backgroundColors = [
-                                'rgba(255, 99, 132, 0.2)', // pink soft
-                                'rgba(54, 162, 235, 0.2)', // blue soft
-                                'rgba(255, 206, 86, 0.2)', // yellow soft
-                                'rgba(75, 192, 192, 0.2)', // green soft
-                                'rgba(153, 102, 255, 0.2)', // purple soft
-                                'rgba(255, 159, 64, 0.2)'  // orange soft
-                            ];
-                            var borderColors = [
-                                'rgba(255, 99, 132, 1)', // pink strong
-                                'rgba(54, 162, 235, 1)', // blue strong
-                                'rgba(255, 206, 86, 1)', // yellow strong
-                                'rgba(75, 192, 192, 1)', // green strong
-                                'rgba(153, 102, 255, 1)', // purple strong
-                                'rgba(255, 159, 64, 1)'  // orange strong
-                            ];
+                        // Define colors for the chart
+                        var backgroundColors = [
+                            'rgba(255, 99, 132, 0.2)', // pink soft
+                            'rgba(54, 162, 235, 0.2)', // blue soft
+                            'rgba(255, 206, 86, 0.2)', // yellow soft
+                            'rgba(75, 192, 192, 0.2)', // green soft
+                            'rgba(153, 102, 255, 0.2)', // purple soft
+                            'rgba(255, 159, 64, 0.2)' // orange soft
+                        ];
+                        var borderColors = [
+                            'rgba(255, 99, 132, 1)', // pink strong
+                            'rgba(54, 162, 235, 1)', // blue strong
+                            'rgba(255, 206, 86, 1)', // yellow strong
+                            'rgba(75, 192, 192, 1)', // green strong
+                            'rgba(153, 102, 255, 1)', // purple strong
+                            'rgba(255, 159, 64, 1)' // orange strong
+                        ];
 
-                            // Setting up the chart
-                            var ctx = document.getElementById('countsChart').getContext('2d');
-                            var countsChart = new Chart(ctx, {
-                                type: 'bar', // You can change this to 'line', 'pie', etc.
-                                data: {
-                                    labels: names,
-                                    datasets: [{
-                                        label: 'Quantities',
-                                        data: quantities,
-                                        backgroundColor: backgroundColors, // Use the defined colors
-                                        borderColor: borderColors, // Use the defined colors
-                                        borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true
-                                        }
+                        // Setting up the chart
+                        var ctx = document.getElementById('countsChart').getContext('2d');
+                        var countsChart = new Chart(ctx, {
+                            type: 'bar', // You can change this to 'line', 'pie', etc.
+                            data: {
+                                labels: names,
+                                datasets: [{
+                                    label: 'จำนวน',
+                                    data: quantities,
+                                    backgroundColor: backgroundColors, // Use the defined colors
+                                    borderColor: borderColors, // Use the defined colors
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
                                     }
                                 }
-                            });
-                        </script>
+                            }
+                        });
+                    </script>
 
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            document.getElementById('showSalesReportButton').addEventListener('click', function() {
-                // Fetch content from the report.sales route
-                fetch("{{ route('report.sales') }}")
-                    .then(response => response.text()) // Get HTML as text
-                    .then(data => {
-                        // สร้าง DOM จาก HTML ที่ดึงมา
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(data, 'text/html');
-                        const element = doc.querySelector('.container'); // ตรวจสอบว่ามีเนื้อหาที่ต้องการอยู่ใน container
+    <script>
+        document.getElementById('showSalesReportButton').addEventListener('click', function() {
+            // Fetch content from the report.sales route
+            fetch("{{ route('report.sales') }}")
+                .then(response => response.text()) // Get HTML as text
+                .then(data => {
+                    // สร้าง DOM จาก HTML ที่ดึงมา
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, 'text/html');
+                    const element = doc.querySelector(
+                    '.container'); // ตรวจสอบว่ามีเนื้อหาที่ต้องการอยู่ใน container
 
-                        // กำหนด CSS เพิ่มเติมถ้าจำเป็น
-                        const style = document.createElement('style');
-                        style.innerHTML = `
+                    // กำหนด CSS เพิ่มเติมถ้าจำเป็น
+                    const style = document.createElement('style');
+                    style.innerHTML = `
                             * {
                                 font-family: 'Open Sans', Arial, sans-serif !important;
                                 color: black !important;
@@ -303,29 +297,38 @@
                                 color: #95a5a6;
                             }
                         `;
-                        element.appendChild(style); // ใส่ style เพิ่มเติม
+                    element.appendChild(style); // ใส่ style เพิ่มเติม
 
-                        // ตั้งค่า options สำหรับการสร้าง PDF
-                        var opt = {
-                            margin: 0.5,
-                            filename: 'Sales_Report.pdf',
-                            image: { type: 'jpeg', quality: 0.98 },
-                            html2canvas: { scale: 2 },
-                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                        };
+                    // ตั้งค่า options สำหรับการสร้าง PDF
+                    var opt = {
+                        margin: 0.5,
+                        filename: 'Sales_Report.pdf',
+                        image: {
+                            type: 'jpeg',
+                            quality: 0.98
+                        },
+                        html2canvas: {
+                            scale: 2
+                        },
+                        jsPDF: {
+                            unit: 'in',
+                            format: 'letter',
+                            orientation: 'portrait'
+                        }
+                    };
 
-                        // สร้าง PDF และเปิดในหน้าต่างใหม่
-                        html2pdf().set(opt).from(element).output('blob').then(function(pdfBlob) {
-                            var pdfUrl = URL.createObjectURL(pdfBlob);
-                            var pdfWindow = window.open();
-                            pdfWindow.location.href = pdfUrl; // แสดง PDF ในหน้าต่างใหม่
-                        });
-                    })
-                    .catch(error => console.error('Error fetching report data:', error));
-            });
-        </script>
+                    // สร้าง PDF และเปิดในหน้าต่างใหม่
+                    html2pdf().set(opt).from(element).output('blob').then(function(pdfBlob) {
+                        var pdfUrl = URL.createObjectURL(pdfBlob);
+                        var pdfWindow = window.open();
+                        pdfWindow.location.href = pdfUrl; // แสดง PDF ในหน้าต่างใหม่
+                    });
+                })
+                .catch(error => console.error('Error fetching report data:', error));
+        });
+    </script>
 
-        <!--   Core JS Files   --
+    <!--   Core JS Files   --
 
             <script src="../assets/js/core/jquery.min.js"></script>
             <script src="../assets/js/core/popper.min.js"></script>
@@ -335,10 +338,10 @@
 
             <script src="../assets/js/plugins/chartjs.min.js"></script>
             <!--  Notifications Plugin    -->
-        <script src="../assets/js/plugins/bootstrap-notify.js"></script>
-        <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-        <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project' -->
-        <script src="../assets/demo/demo.js"></script>
+    <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project' -->
+    <script src="../assets/demo/demo.js"></script>
 
 </body>
 

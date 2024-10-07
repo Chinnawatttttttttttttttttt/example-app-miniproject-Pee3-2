@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
+    <title>ลงทะเบียน</title>
     <!-- เรียกใช้ไฟล์ CSS -->
     <link rel="stylesheet" href="{{ url('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url('assets/css/paper-dashboard.css') }}">
@@ -17,13 +17,13 @@
             <div class="col-lg-6 col-md-8 col-sm-10">
                 <div class="card">
                     <div class="card-header text-center">
-                        <h4>Register</h4>
+                        <h4>ลงทะเบียน</h4>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('register.user') }}" method="post">
                             @csrf
                             <div class="form-group">
-                                <label for="username">Username</label>
+                                <label for="username">ชื่อผู้ใช้</label>
                                 <input type="text" class="form-control" name="username" required>
                                 <span class="text-danger">
                                     @error('username')
@@ -32,7 +32,7 @@
                                 </span>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email</label>
+                                <label for="email">อีเมล</label>
                                 <input type="email" class="form-control" name="email" required>
                                 <span class="text-danger">
                                     @error('email')
@@ -41,7 +41,7 @@
                                 </span>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password</label>
+                                <label for="password">รหัสผ่าน</label>
                                 <input type="password" class="form-control" name="password" required>
                                 <span class="text-danger">
                                     @error('password')
@@ -49,8 +49,8 @@
                                     @enderror
                                 </span>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
-                            <a href="{{ route('login') }}" class="btn btn-secondary btn-block">Back</a>
+                            <button type="submit" class="btn btn-primary btn-block">ลงทะเบียน</button>
+                            <a href="{{ route('login') }}" class="btn btn-secondary btn-block">กลับไปยังหน้าเข้าสู่ระบบ</a>
                         </form>
                     </div>
                 </div>

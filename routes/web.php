@@ -32,7 +32,7 @@ Route::controller(ProductController::class)->group(function(){
     Route::get('add-product','AddProduct')->middleware('CheckLogin');
     Route::post('/add-product-post','AddProductPost')->name('store.product');
 
-    Route::get('all-product','ShowProduct')->middleware('CheckLogin');
+    Route::get('all-product','ShowProduct')->name('product.show')->middleware('CheckLogin');
 
     Route::get('edit-product/{id}','EditProduct')->middleware('CheckLogin');
     Route::post('/update-product','update')->name('product.update');
